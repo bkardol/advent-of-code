@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace InputService
+namespace Common
 {
     public static class InputService
     {

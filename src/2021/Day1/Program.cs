@@ -2,12 +2,13 @@
 {
     using System;
     using System.Linq;
+    using Common;
 
     class Program
     {
         static void Main()
         {
-            var depths = InputService.InputService.GetInput().Select(line => Convert.ToInt32(line)).ToArray();
+            var depths = InputService.GetInput().Select(line => Convert.ToInt32(line)).ToArray();
 
             Part1(depths);
             Part2(depths);
