@@ -1,16 +1,16 @@
 ﻿namespace Common
 {
-    public abstract class Puzzle
+    public abstract class PuzzleSolution
     {
         public abstract string[] Part1();
         public abstract string[] Part2();
     }
 
-    public abstract class Puzzle<TParsed> : Puzzle
+    public abstract class PuzzleSolution<TParsed> : PuzzleSolution
     {
         protected TParsed[] Input { get; private set; }
 
-        public Puzzle()
+        public PuzzleSolution()
         {
             Input = ParseInput(InputService.GetInput());
         }
