@@ -4,7 +4,7 @@
     using System.Linq;
     using Common;
 
-    internal class Solution : PuzzleSolution<int>
+    internal class Solution : PuzzleSolution<int[]>
     {
         public override int[] ParseInput(string[] lines) => lines.Select(line => Convert.ToInt32(line)).ToArray();
 

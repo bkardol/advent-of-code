@@ -5,7 +5,7 @@
     using System.Linq;
     using Common;
 
-    internal class Solution : PuzzleSolution<BitArray>
+    internal class Solution : PuzzleSolution<BitArray[]>
     {
         public override BitArray[] ParseInput(string[] lines) => lines.Select(line => new BitArray(line.Select(bit => bit == '1').Reverse().ToArray())).ToArray();
 

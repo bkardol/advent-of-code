@@ -4,7 +4,7 @@
     using System.Linq;
     using Common;
 
-    internal class Solution : PuzzleSolution<Command>
+    internal class Solution : PuzzleSolution<Command[]>
     {
         public override Command[] ParseInput(string[] lines) => lines.Select(line => line.Split(' ')).Select(commandParts => new Command(Enum.Parse<Direction>(commandParts[0], true), Convert.ToInt32(commandParts[1]))).ToArray();
 

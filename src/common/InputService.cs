@@ -1,8 +1,8 @@
-﻿using System.IO;
-using System.Reflection;
-
-namespace Common
+﻿namespace Common
 {
+    using System.IO;
+    using System.Reflection;
+
     public static class InputService
     {
         public static string[] GetExample() => GetFileLines("example");
