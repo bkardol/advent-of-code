@@ -3,10 +3,11 @@
     using System;
     using System.Linq;
     using Common;
+    using Common.Extensions;
 
     internal class Solution : PuzzleSolution<int[]>
     {
-        public override int[] ParseInput(string[] lines) => lines.Select(line => Convert.ToInt32(line)).ToArray();
+        public override int[] ParseInput(string[] lines) => lines.ToIntArray();
 
         public override string[] Part1()
         {
