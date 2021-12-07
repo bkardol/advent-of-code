@@ -4,7 +4,7 @@ using Common;
 
 namespace $safeprojectname$
 {
-    internal class Solution : PuzzleSolution<string>
+    internal class Solution : PuzzleSolution<string[]>
 {
     public override string[] ParseInput(string[] lines) => lines.ToArray();
 
