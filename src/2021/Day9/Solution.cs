@@ -53,7 +53,7 @@
         {
             int result = GetCaveLowestPoints().Select(location =>
             {
-                var basin = new Dictionary<Location, int> { [location] = location.Height };
+                var basin = new Dictionary<Location, int>();
                 GetAdjacentHigherPoints(location, basin);
                 return basin.Count;
             }).OrderByDescending(size => size).Take(3).Aggregate(1, (a, b) => a * b);
