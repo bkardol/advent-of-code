@@ -4,13 +4,14 @@
     {
         public abstract string[] Part1();
         public abstract string[] Part2();
+        internal abstract void SetInput();
     }
 
     public abstract class PuzzleSolution<TParsed> : PuzzleSolution
     {
         protected TParsed Input { get; private set; }
 
-        public PuzzleSolution()
+        internal override void SetInput()
         {
             Input = ParseInput(
 #if DEBUG

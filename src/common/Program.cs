@@ -14,7 +14,10 @@
 
             PuzzleSolution puzzle = Activator.CreateInstance(puzzleType) as PuzzleSolution;
 
+            puzzle.SetInput();
             Part1(puzzle);
+
+            puzzle.SetInput();
             Part2(puzzle);
 
             Console.ReadLine();
