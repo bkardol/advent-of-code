@@ -9,6 +9,10 @@
 
     internal class Solution : PuzzleSolution<Instruction[]>
     {
+        private const string NOP = "nop";
+        private const string JMP = "jmp";
+        private const string ACC = "acc";
+
         public override Instruction[] ParseInput(string[] lines) => lines
             .Select(line => line.Split(new char[] { ' ', '+' }, StringSplitOptions.RemoveEmptyEntries))
             .Select((splitted, i) => new Instruction(i, splitted[0], Convert.ToInt32(splitted[1])))
@@ -32,11 +36,11 @@
                 var instructions = Input.ToArray();
                 switch (instruction.Operation)
                 {
-                    case "jmp":
-                        instructions[instruction.Id] = new Instruction(instruction.Id, "nop", instruction.Argument);
+                    case JMP:
+                        instructions[instruction.Id] = new Instruction(instruction.Id, NOP, instruction.Argument);
                         break;
-                    case "nop":
-                        instructions[instruction.Id] = new Instruction(instruction.Id, "jmp", instruction.Argument);
+                    case NOP:
+                        instructions[instruction.Id] = new Instruction(instruction.Id, JMP, instruction.Argument);
                         break;
                     default:
                         continue;
@@ -68,10 +72,10 @@
                 }
                 switch (instruction.Operation)
                 {
-                    case "acc":
+                    case ACC:
                         accumulator += instruction.Argument;
                         break;
-                    case "jmp":
+                    case JMP:
                         i += instruction.Argument - 1;
                         break;
                 }
