@@ -3,45 +3,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using Common;
-    using Common.Extensions;
+    using Common.IEnumerable;
 
     internal class Solution : PuzzleSolution<Location[][]>
     {
-        public override Location[][] ParseInput(string[] lines)
-        {
-
-            var cave = lines.Select(l => l.ToIntArray().Select((height) => new Location(height)).ToArray()).ToArray();
-
-            for (int y = 0; y < cave.Length; ++y)
-            {
-                var row = cave[y];
-                for (int x = 0; x < row.Length; ++x)
-                {
-                    if(x > 0)
-                    {
-                        cave[y][x].SetLeft(row[x - 1]);
-                    }
-                    if (x < row.Length - 1)
-                    {
-                        cave[y][x].SetRight(row[x + 1]);
-                    }
-                    if (y > 0)
-                    {
-                        cave[y][x].SetTop(cave[y - 1][x]);
-                    }
-                    if (y < cave.Length - 1)
-                    {
-                        cave[y][x].SetBottom(cave[y + 1][x]);
-                    }
-                }
-            }
-
-            return cave;
-        }
+        public override Location[][] ParseInput(string[] lines) => lines.ToIntMatrix<Location>();
 
         public override string[] Part1()
         {
-            int sumOfLowestPoints = GetCaveLowestPoints().Sum(location => location.Height + 1);
+            int sumOfLowestPoints = GetCaveLowestPoints().Sum(location => location.Value + 1);
 
             return new string[]
             {
@@ -64,12 +34,12 @@
             };
         }
 
-        public IEnumerable<Location> GetCaveLowestPoints() => Input.SelectMany(r => r.Where(location => location.GetAdjacentLocations().All(adjacent => location.Height < adjacent.Height)));
+        public IEnumerable<Location> GetCaveLowestPoints() => Input.SelectMany(r => r.Where(location => location.IsLowerThanAdjacent()));
 
         public void GetAdjacentHigherPoint(Location currentLocation, Location adjacentLocation, Dictionary<Location, int> basin)
         {
-            if (adjacentLocation.Height > currentLocation.Height &&
-                adjacentLocation.Height != 9 &&
+            if (adjacentLocation.Value > currentLocation.Value &&
+                adjacentLocation.Value != 9 &&
                 !basin.ContainsKey(adjacentLocation))
             {
                 GetAdjacentHigherPoints(adjacentLocation, basin);
@@ -78,8 +48,8 @@
 
         public void GetAdjacentHigherPoints(Location location, Dictionary<Location, int> basin)
         {
-            basin[location] = location.Height;
-            foreach (var adjacentLocation in location.GetAdjacentLocations())
+            basin[location] = location.Value;
+            foreach (var adjacentLocation in location.GetAdjacent())
             {
                 GetAdjacentHigherPoint(location, adjacentLocation, basin);
             }

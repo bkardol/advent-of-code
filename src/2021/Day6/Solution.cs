@@ -3,7 +3,8 @@
     using System;
     using System.Linq;
     using Common;
-    using Common.Extensions;
+    using Common.IEnumerable;
+    using Common.String;
 
     internal class Solution : PuzzleSolution<int[]>
     {
