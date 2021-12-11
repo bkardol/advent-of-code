@@ -11,13 +11,19 @@
         public static int[] ToIntArray(this IEnumerable<string> source) =>
             source.Select(n => Convert.ToInt32(n)).ToArray();
 
-        public static T[][] ToIntMatrix<T>(this IEnumerable<string> source, bool includeDiagonal = false)
-            where T : Cell<T, int>, new()
+        public static T[][] ToIntMatrix<T>(this IEnumerable<string> source, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
+            where T : Cell<T, int>, new() => source.Select(line => line.ToIntArray()).ToMatrix<T, int, int>(val => val, includeDiagonal, isHorizontalPattern, isVerticalPattern);
+
+        public static T[][] ToBoolMatrix<T>(this IEnumerable<string> source, char trueChar, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
+            where T : Cell<T, bool>, new() => source.Select(line => line.ToCharArray()).ToMatrix<T, char, bool>(val => val == trueChar, includeDiagonal, isHorizontalPattern, isVerticalPattern);
+
+        private static T[][] ToMatrix<T, TSource, TValue>(this IEnumerable<IEnumerable<TSource>> source, Func<TSource, TValue> getValue, bool includeDiagonal, bool isHorizontalPattern, bool isVerticalPattern)
+            where T : Cell<T, TValue>, new()
         {
-            T[][] matrix = source.Select(l => l.ToIntArray().Select((val) =>
+            var matrix = source.Select(l => l.Select((val) =>
             {
                 var cell = new T();
-                cell.SetValue(val);
+                cell.SetValue(getValue(val));
                 return cell;
             }).ToArray()).ToArray();
 
@@ -33,6 +39,14 @@
                     if (y > 0)
                     {
                         matrix[y][x].SetTop(matrix[y - 1][x], includeDiagonal);
+                    }
+                    if (isHorizontalPattern && x == row.Length - 1)
+                    {
+                        matrix[y][0].SetLeft(row[x]);
+                    }
+                    if (isVerticalPattern && y == matrix.Length - 1)
+                    {
+                        matrix[0][x].SetTop(row[x], includeDiagonal);
                     }
                 }
             }

@@ -1,59 +1,71 @@
 ﻿namespace Common.Matrix
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    public abstract class Cell
+    public abstract class Cell<TCell, TValue>
+        where TCell : Cell<TCell, TValue>
     {
-        private Cell Left;
-        private Cell Right;
-        private Cell Top;
-        private Cell Bottom;
+        public TValue Value { get; protected set; }
 
-        private Cell TopLeft;
-        private Cell TopRight;
-        private Cell BottomRight;
-        private Cell BottomLeft;
+        public TCell Left { get; private set; }
+        public TCell Right { get; private set; }
+        public TCell Top { get; private set; }
+        public TCell Bottom { get; private set; }
 
-        internal void SetLeft(Cell left)
+        public TCell TopLeft { get; private set; }
+        public TCell TopRight { get; private set; }
+        public TCell BottomRight { get; private set; }
+        public TCell BottomLeft { get; private set; }
+
+        public TCell PositionsLeft(int positions) => GetFromDirection(positions, cell => cell.Left);
+        public TCell PositionsRight(int positions) => GetFromDirection(positions, cell => cell.Right);
+        public TCell PositionsTop(int positions) => GetFromDirection(positions, cell => cell.Top);
+        public TCell PositionsBottom(int positions) => GetFromDirection(positions, cell => cell.Bottom);
+
+        internal void SetValue(TValue value) => Value = value;
+
+        internal void SetLeft(TCell left)
         {
             Left = left;
-            Left.Right = this;
+            Left.Right = this as TCell;
         }
-        internal void SetTop(Cell top, bool includeDiagonal)
+
+        internal void SetTop(TCell top, bool includeDiagonal)
         {
             Top = top;
-            Top.Bottom = this;
+            Top.Bottom = this as TCell;
 
             if (includeDiagonal)
             {
                 TopLeft = top.Left;
                 TopRight = top.Right;
+
                 if (TopLeft != null)
                 {
-                    TopLeft.BottomRight = this;
+                    TopLeft.BottomRight = this as TCell;
                 }
 
                 if (TopRight != null)
                 {
-                    TopRight.BottomLeft = this;
+                    TopRight.BottomLeft = this as TCell;
                 }
             }
         }
 
-        protected IEnumerable<T> GetAdjacent<T>()
-            where T : Cell =>
-            new T[] { (T)Left, (T)Right, (T)Top, (T)Bottom, (T)TopLeft, (T)TopRight, (T)BottomLeft, (T)BottomRight }
+        protected IEnumerable<TCell> GetAdjacent() =>
+            new TCell[] { Left, Right, Top, Bottom, TopLeft, TopRight, BottomLeft, BottomRight }
             .Where(l => l != null);
-    }
 
-    public abstract class Cell<TCell, TValue> : Cell
-        where TCell : Cell
-    {
-        public TValue Value { get; protected set; }
-
-        internal void SetValue(TValue value) => Value = value;
-
-        public IEnumerable<TCell> GetAdjacent() => GetAdjacent<TCell>();
+        private TCell GetFromDirection(int positions, Func<TCell, TCell> getInDirection)
+        {
+            var cell = this as TCell;
+            while (--positions >= 0 && cell != null)
+            {
+                cell = getInDirection(cell);
+            }
+            return cell;
+        }
     }
 }
