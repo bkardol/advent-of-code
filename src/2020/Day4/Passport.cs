@@ -20,17 +20,11 @@
             ["ecl"] = (value) => eyeColors.Contains(value),
             ["pid"] = (value) => value.Length == 9 && long.TryParse(value, out _)
         };
-        private readonly Dictionary<string, string> fields = new();
+        private readonly Dictionary<string, string> fields;
 
         public bool IsValidWithoutValidations => requiredFields.Keys.All(field => fields.ContainsKey(field));
         public bool IsValidWithValidations => requiredFields.All(kv => fields.ContainsKey(kv.Key) && kv.Value(fields[kv.Key]));
 
-        public void AddFields(Dictionary<string, string> fields)
-        {
-            foreach (var field in fields)
-            {
-                this.fields.Add(field.Key, field.Value);
-            }
-        }
+        public Passport(Dictionary<string, string> fields) => this.fields = fields;
     }
 }

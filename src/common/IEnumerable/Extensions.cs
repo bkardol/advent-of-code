@@ -8,6 +8,20 @@
 
     public static class Extensions
     {
+        public static string[][] GroupByEmptyLine(this IEnumerable<string> source) =>
+            source.Aggregate(new List<List<string>> { new List<string>() }, (lines, line) =>
+            {
+                if(string.IsNullOrWhiteSpace(line))
+                {
+                    lines.Add(new List<string>());
+                }
+                else
+                {
+                    lines.Last().Add(line);
+                }
+                return lines;
+            }).Select(linesList => linesList.ToArray()).ToArray();
+
         public static int[] ToIntArray(this IEnumerable<string> source) =>
             source.Select(n => Convert.ToInt32(n)).ToArray();
 
