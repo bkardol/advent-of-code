@@ -15,8 +15,6 @@
         private Cell BottomRight;
         private Cell BottomLeft;
 
-        private bool includeDiagonal = false;
-
         internal void SetLeft(Cell left)
         {
             Left = left;
@@ -24,8 +22,6 @@
         }
         internal void SetTop(Cell top, bool includeDiagonal)
         {
-            this.includeDiagonal = includeDiagonal;
-
             Top = top;
             Top.Bottom = this;
 
