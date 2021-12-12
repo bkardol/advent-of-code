@@ -25,6 +25,9 @@
         public static int[] ToIntArray(this IEnumerable<string> source) =>
             source.Select(n => Convert.ToInt32(n)).ToArray();
 
+        public static long[] ToLongArray(this IEnumerable<string> source) =>
+            source.Select(n => Convert.ToInt64(n)).ToArray();
+
         public static T[][] ToIntMatrix<T>(this IEnumerable<string> source, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
             where T : Cell<T, int>, new() => source.Select(line => line.ToIntArray()).ToMatrix<T, int, int>(val => val, includeDiagonal, isHorizontalPattern, isVerticalPattern);
 
