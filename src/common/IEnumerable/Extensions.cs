@@ -34,6 +34,9 @@
         public static T[][] ToBoolMatrix<T>(this IEnumerable<string> source, char trueChar, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
             where T : Cell<T, bool>, new() => source.Select(line => line.ToCharArray()).ToMatrix<T, char, bool>(val => val == trueChar, includeDiagonal, isHorizontalPattern, isVerticalPattern);
 
+        public static T[][] ToNullableBoolMatrix<T>(this IEnumerable<string> source, char trueChar, char falseChar, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
+            where T : Cell<T, bool?>, new() => source.Select(line => line.ToCharArray()).ToMatrix<T, char, bool?>(val => val == trueChar ? true : val == falseChar ? false : null, includeDiagonal, isHorizontalPattern, isVerticalPattern);
+
         private static T[][] ToMatrix<T, TSource, TValue>(this IEnumerable<IEnumerable<TSource>> source, Func<TSource, TValue> getValue, bool includeDiagonal, bool isHorizontalPattern, bool isVerticalPattern)
             where T : Cell<T, TValue>, new()
         {
