@@ -16,16 +16,12 @@
             var folds = new List<Fold>();
             foreach (var line in lines)
             {
-                if (string.IsNullOrEmpty(line))
-                {
-                    continue;
-                }
-                else if (line.StartsWith("fold"))
+                if (line.StartsWith("fold"))
                 {
                     var splitted = line.Split(new char[] { ' ', '=' });
                     folds.Add(new Fold(splitted[^2] == "y", Convert.ToInt32(splitted[^1])));
                 }
-                else
+                else if(!string.IsNullOrEmpty(line))
                 {
                     var xy = line.Split(',');
                     int x = Convert.ToInt32(xy[0]);
@@ -67,19 +63,21 @@
             };
         }
 
+        private static T YX<T>(Fold fold, T y, T x) => fold.alongY ? y : x;
+
         private static bool[][] FoldPaper(bool[][] paper, Fold fold)
         {
-            for (int y = fold.alongY ? fold.value : 0; y < paper.Length; ++y)
+            for (int y = YX(fold, fold.value, 0); y < paper.Length; ++y)
             {
-                for (int x = fold.alongY ? 0 : fold.value; x < paper[y].Length; ++x)
+                for (int x = YX(fold, 0, fold.value); x < paper[y].Length; ++x)
                 {
                     if (paper[y][x])
                     {
-                        paper[fold.alongY ? fold.value - (y - fold.value) : y][fold.alongY ? x : fold.value - (x - fold.value)] = paper[y][x];
+                        paper[YX(fold, fold.value - (y - fold.value), y)][YX(fold, x, fold.value - (x - fold.value))] = paper[y][x];
                     }
                 }
             }
-            return fold.alongY ? paper.Take(fold.value).ToArray() : paper.Select(dots => dots.Take(fold.value).ToArray()).ToArray();
+            return YX(fold, paper.Take(fold.value).ToArray(), paper.Select(dots => dots.Take(fold.value).ToArray()).ToArray());
         }
 
         private static void PrintPaper(bool[][] paper)
