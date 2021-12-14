@@ -15,21 +15,9 @@
 
         public override string[] Part1()
         {
-            string result = Input.Template;
-            for (int steps = 0, inserted = 0; steps < 10; ++steps)
-            {
-                string template = result;
-                inserted = 0;
-                for (int i = 1; i < template.Length; ++i)
-                {
-                    var pair = Input.InsertionPairs.FirstOrDefault(pair => pair.BetweenElements == template.Substring(i - 1, 2));
-                    result = result.Insert(i + inserted++, pair.Element.ToString());
-                }
-            }
-
-            var elementsGrouped = result.GroupBy(c => c);
-            int leastCommonElement = elementsGrouped.Min(g => g.Count());
-            int mostCommonElement = elementsGrouped.Max(g => g.Count());
+            var polymerCounts = GetPolymerOccurences(10);
+            var leastCommonElement = Math.Ceiling(polymerCounts.Min(p => p.Value) / 2.0);
+            var mostCommonElement = Math.Ceiling(polymerCounts.Max(p => p.Value) / 2.0);
 
             return new string[]
             {
@@ -40,6 +28,20 @@
         }
 
         public override string[] Part2()
+        {
+            var polymerCounts = GetPolymerOccurences(40);
+            var leastCommonElement = Math.Ceiling(polymerCounts.Min(p => p.Value) / 2.0);
+            var mostCommonElement = Math.Ceiling(polymerCounts.Max(p => p.Value) / 2.0);
+
+            return new string[]
+            {
+                $"The least common element is: {leastCommonElement}",
+                $"The most common element is: {mostCommonElement}",
+                $"The most common element subtracted by the least common element is: {mostCommonElement - leastCommonElement}",
+            };
+        }
+
+        private Dictionary<char, long> GetPolymerOccurences(int amountOfSteps)
         {
             string result = Input.Template;
             var polymerPairCounts = new Dictionary<string, long>();
@@ -52,7 +54,7 @@
                     polymerPairCounts[polymerPair] = 1;
             }
 
-            for (int steps = 0; steps < 40; ++steps)
+            for (int steps = 0; steps < amountOfSteps; ++steps)
             {
                 var newPolymerPairCounts = new Dictionary<string, long>();
                 foreach (var pairCount in polymerPairCounts)
@@ -70,7 +72,7 @@
             }
 
             var polymerCounts = new Dictionary<char, long>();
-            foreach(var pairCount in polymerPairCounts)
+            foreach (var pairCount in polymerPairCounts)
             {
                 foreach (var polymer in pairCount.Key)
                 {
@@ -80,15 +82,9 @@
                         polymerCounts[polymer] = pairCount.Value;
                 }
             }
-            var leastCommonElement = polymerCounts.Min(p => p.Value) / 2;
-            var mostCommonElement = polymerCounts.Max(p => p.Value) / 2;
+            polymerCounts[Input.Template.Last()]++;
 
-            return new string[]
-            {
-                $"The least common element is: {leastCommonElement}",
-                $"The most common element is: {mostCommonElement}",
-                $"The most common element subtracted by the least common element is: {mostCommonElement - leastCommonElement}",
-            };
+            return polymerCounts;
         }
     }
 }
