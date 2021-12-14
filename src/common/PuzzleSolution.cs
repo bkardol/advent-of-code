@@ -15,7 +15,7 @@
         {
             Input = ParseInput(
 #if DEBUG
-                InputService.GetInput()
+                InputService.GetExample()
 #else
                 InputService.GetInput()
 #endif

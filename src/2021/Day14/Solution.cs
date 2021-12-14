@@ -16,8 +16,8 @@
         public override string[] Part1()
         {
             var polymerCounts = GetPolymerOccurences(10);
-            var leastCommonElement = Math.Ceiling(polymerCounts.Min(p => p.Value) / 2.0);
-            var mostCommonElement = Math.Ceiling(polymerCounts.Max(p => p.Value) / 2.0);
+            var leastCommonElement = polymerCounts.Min(p => p.Value) / 2;
+            var mostCommonElement = polymerCounts.Max(p => p.Value) / 2;
 
             return new string[]
             {
@@ -30,8 +30,8 @@
         public override string[] Part2()
         {
             var polymerCounts = GetPolymerOccurences(40);
-            var leastCommonElement = Math.Ceiling(polymerCounts.Min(p => p.Value) / 2.0);
-            var mostCommonElement = Math.Ceiling(polymerCounts.Max(p => p.Value) / 2.0);
+            var leastCommonElement = polymerCounts.Min(p => p.Value) / 2;
+            var mostCommonElement = polymerCounts.Max(p => p.Value) / 2;
 
             return new string[]
             {
@@ -82,6 +82,7 @@
                         polymerCounts[polymer] = pairCount.Value;
                 }
             }
+            polymerCounts[Input.Template.First()]++;
             polymerCounts[Input.Template.Last()]++;
 
             return polymerCounts;
