@@ -31,6 +31,9 @@
         public static T[][] ToIntMatrix<T>(this IEnumerable<string> source, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
             where T : Cell<T, int>, new() => source.Select(line => line.ToIntArray()).ToMatrix<T, int, int>(val => val, includeDiagonal, isHorizontalPattern, isVerticalPattern);
 
+        public static T[][] ToIntMatrix<T>(this IEnumerable<string> source, Func<char, int> getValue, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
+            where T : Cell<T, int>, new() => source.Select(line => line.Select(c => getValue(c))).ToMatrix<T, int, int>(val => val, includeDiagonal, isHorizontalPattern, isVerticalPattern);
+
         public static T[][] ToBoolMatrix<T>(this IEnumerable<string> source, char trueChar, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
             where T : Cell<T, bool>, new() => source.Select(line => line.ToCharArray()).ToMatrix<T, char, bool>(val => val == trueChar, includeDiagonal, isHorizontalPattern, isVerticalPattern);
 
