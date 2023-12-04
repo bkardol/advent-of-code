@@ -1,6 +1,7 @@
 ﻿namespace Common
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
 
@@ -32,10 +33,15 @@
             Console.WriteLine();
             Console.WriteLine($"PART {puzzleNumber}");
 
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
             var results = puzzleDelegate();
+            stopwatch.Stop();
+
             foreach (var result in results)
             {
-                Console.WriteLine(result);
+                Console.WriteLine($"{stopwatch.ElapsedMilliseconds} - {result}");
             }
         }
     }
