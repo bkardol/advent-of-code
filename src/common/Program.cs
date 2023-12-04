@@ -41,7 +41,7 @@
 
             foreach (var result in results)
             {
-                Console.WriteLine($"{stopwatch.ElapsedMilliseconds} - {result}");
+                Console.WriteLine($"{stopwatch.Elapsed} - {result}");
             }
         }
     }
