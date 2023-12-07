@@ -4,15 +4,17 @@
     {
         public abstract string[] Part1();
         public abstract string[] Part2();
-        internal abstract void SetInput();
+        internal abstract void SetInput(int part);
     }
 
     public abstract class PuzzleSolution<TParsed> : PuzzleSolution
     {
+        protected int Part { get; private set; }
         protected TParsed Input { get; private set; }
 
-        internal override void SetInput()
+        internal override void SetInput(int part)
         {
+            Part = part;
             Input = ParseInput(
 #if DEBUG
                 InputService.GetExample()
