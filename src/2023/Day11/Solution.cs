@@ -5,12 +5,12 @@
     using System.Linq;
     using Common;
 
-    internal class Solution : PuzzleSolution<List<List<SpaceCoord>>>
+    internal class Solution : PuzzleSolution<SpaceCoord[][]>
     {
         List<int> emptyRowIndexes;
         List<int> emptyColumnIndexes;
 
-        public override List<List<SpaceCoord>> ParseInput(string[] lines)
+        public override SpaceCoord[][] ParseInput(string[] lines)
         {
             emptyRowIndexes = new List<int>();
             emptyColumnIndexes = new List<int>();
@@ -25,18 +25,11 @@
             }
 
             int galaxyCount = 0;
-            var galaxy = new List<List<SpaceCoord>>();
-            for (int i = 0; i < lines.Length; i++)
-            {
-                var row = new List<SpaceCoord>();
-                for (int j = 0; j < lines[i].Length; j++)
-                {
-                    row.Add(new SpaceCoord(lines[i][j] == '#' ? ++galaxyCount : 0, j, i));
-                }
-                galaxy.Add(row);
-            }
-
-            return galaxy;
+            return lines
+                .Select((line, i) => line
+                    .Select((c, j) => new SpaceCoord(c == '#' ? ++galaxyCount : 0, j, i))
+                    .ToArray())
+                .ToArray();
         }
 
         public override string[] Part1()
