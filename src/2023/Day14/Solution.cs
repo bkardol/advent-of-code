@@ -1,36 +1,19 @@
 ﻿namespace Day14
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using Common;
-    using Common.Array;
     using Common.IEnumerable;
 
-    internal class Solution : PuzzleSolution<Location[][]>
+    internal class Solution : PuzzleSolution<Platform>
     {
-        public override Location[][] ParseInput(string[] lines) => lines.ToMatrix<Location, LocationType>(pipe => (LocationType)pipe);
+        public override Platform ParseInput(string[] lines) => new Platform(lines.ToMatrix<Location, LocationType>(pipe => (LocationType)pipe));
 
         public override string[] Part1()
         {
-            var sum = 0;
-            foreach (var row in Input)
-            {
-                foreach (var location in row)
-                {
-                    location.SlideRockNorth();
-                }
-            }
+            Input.TiltToSlideNorth();
 
-            for (int i = 0; i < Input.Length; i++)
-            {
-                var row = Input[i];
-                foreach (var location in row.Where(l => l.Value == LocationType.RoundedRock))
-                {
-                    sum += (Input.Length - i);
-                }
-            }
+            var sum = Input.GetTotalLoad();
 
             return new string[]
             {
@@ -41,76 +24,32 @@
         public override string[] Part2()
         {
             var runs = 1000000000;
-            var sum = 0;
             bool lastRuns = false;
-            var originalIteration = new Dictionary<string, int>();
-            var valueIteration = new Dictionary<string, int>();
+            var pattern = new Dictionary<string, bool>();
             for (int i = 0; i < runs; i++)
             {
-                var key = string.Join(';', Input.SelectMany(row => row.Select(l => $"{l.Value}")));
-                if (!lastRuns && valueIteration.ContainsKey(key))
+                var key = Input.CreateKey();
+                if (!lastRuns && pattern.ContainsKey(key) && pattern[key])
                 {
                     lastRuns = true;
-                    i = runs - ((runs - i) % valueIteration.Count);
+                    i = runs - (runs - i) % pattern.Values.Count(p => p);
                 }
-                if (originalIteration.ContainsKey(key))
+                if (pattern.ContainsKey(key))
                 {
-                    Console.WriteLine($"{i} Looks a lot like {originalIteration[key]}!!!");
-                    valueIteration[key] = i - originalIteration[key];
+                    pattern[key] = true;
                 }
                 else
                 {
-                    originalIteration.Add(key, i);
+                    pattern.Add(key, false);
                 }
 
-                foreach (var row in Input)
-                {
-                    foreach (var location in row)
-                    {
-                        location.SlideRockNorth();
-                    }
-                }
-                File.WriteAllLines("output.aoc", Input.Select(i => i.Aggregate("", (total, next) => $"{total}{(char)next.Value}")));
-
-                for (int j = 0; j < Input[0].Length; j++)
-                {
-                    var column = CommonArray.GetColumn(Input, j);
-                    foreach (var location in column)
-                    {
-                        location.SlideRockWest();
-                    }
-                }
-                File.WriteAllLines("output.aoc", Input.Select(i => i.Aggregate("", (total, next) => $"{total}{(char)next.Value}")));
-
-                foreach (var row in Input.Reverse())
-                {
-                    foreach (var location in row)
-                    {
-                        location.SlideRockSouth();
-                    }
-                }
-                File.WriteAllLines("output.aoc", Input.Select(i => i.Aggregate("", (total, next) => $"{total}{(char)next.Value}")));
-
-                for (int j = Input[0].Length - 1; j >= 0; j--)
-                {
-                    var column = CommonArray.GetColumn(Input, j);
-                    foreach (var location in column)
-                    {
-                        location.SlideRockEast();
-                    }
-                }
-                File.WriteAllLines("output.aoc", Input.Select(i => i.Aggregate("", (total, next) => $"{total}{(char)next.Value}")));
+                Input.TiltToSlideNorth();
+                Input.TiltToSlideWest();
+                Input.TiltToSlideSouth();
+                Input.TiltToSlideEast();
             }
 
-            for (int i = 0; i < Input.Length; i++)
-            {
-                var row = Input[i];
-                foreach (var location in row.Where(l => l.Value == LocationType.RoundedRock))
-                {
-                    sum += (Input.Length - i);
-                }
-            }
-
+            var sum = Input.GetTotalLoad();
             return new string[]
             {
                 sum.ToString()
