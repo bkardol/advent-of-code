@@ -11,7 +11,7 @@
         public static string[][] GroupByEmptyLine(this IEnumerable<string> source) =>
             source.Aggregate(new List<List<string>> { new List<string>() }, (lines, line) =>
             {
-                if(string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line))
                 {
                     lines.Add(new List<string>());
                 }
@@ -28,7 +28,10 @@
         public static long[] ToLongArray(this IEnumerable<string> source) =>
             source.Select(n => Convert.ToInt64(n)).ToArray();
 
-        public static T[][] ToMatrix<T,Y>(this IEnumerable<string> source, Func<char, Y> getValue, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
+        public static T[][] ToMatrix<T, Y>(this IEnumerable<IEnumerable<T>> source, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
+            where T : Cell<T, Y>, new() => LinkMatrix<T, Y>(source, includeDiagonal, isHorizontalPattern, isVerticalPattern);
+
+        public static T[][] ToMatrix<T, Y>(this IEnumerable<string> source, Func<char, Y> getValue, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
             where T : Cell<T, Y>, new() => source.Select(line => line.Select(c => getValue(c))).ToMatrix<T, Y, Y>(val => val, includeDiagonal, isHorizontalPattern, isVerticalPattern);
 
         public static T[][] ToIntMatrix<T>(this IEnumerable<string> source, bool includeDiagonal = false, bool isHorizontalPattern = false, bool isVerticalPattern = false)
@@ -53,6 +56,13 @@
                 return cell;
             }).ToArray()).ToArray();
 
+            return LinkMatrix<T, TValue>(matrix, includeDiagonal, isHorizontalPattern, isVerticalPattern);
+        }
+
+        private static T[][] LinkMatrix<T, TValue>(IEnumerable<IEnumerable<T>> source, bool includeDiagonal, bool isHorizontalPattern, bool isVerticalPattern)
+            where T : Cell<T, TValue>, new()
+        {
+            var matrix = source.Select(s => s.ToArray()).ToArray();
             for (int y = 0; y < matrix.Length; ++y)
             {
                 var row = matrix[y];

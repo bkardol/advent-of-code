@@ -63,8 +63,8 @@
             var pathDict = new Dictionary<Node, int>();
 
             var nextOptions = new PriorityQueue<(Node, Direction, List<Node>, int, int), int>();
-            nextOptions.Enqueue((startNode.Bottom, Direction.Top, new List<Node> { startNode.Bottom }, startNode.Bottom.Value, 1), 0);
-            nextOptions.Enqueue((startNode.Right, Direction.Left, new List<Node> { startNode.Right }, startNode.Right.Value, 1), 0);
+            nextOptions.Enqueue((startNode.Bottom, Direction.Top, new List<Node> { startNode.Bottom }, startNode.Bottom.Value, 1), 1);
+            nextOptions.Enqueue((startNode.Right, Direction.Left, new List<Node> { startNode.Right }, startNode.Right.Value, 1), 1);
 
             var current = this;
             var result = 0;

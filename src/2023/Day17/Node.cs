@@ -8,7 +8,6 @@
     {
         public IDictionary<int, int> DirectionDistance { get; } = new Dictionary<int, int>();
         public char Character { get; set; } = 'O';
-        public int Distance { get; private set; } = int.MaxValue;
 
         public List<(Node, Direction, List<Node>, int, int)> VisitPart1(Direction sourceDirection, List<Node> path, int totalDistance, int currentAmountInDirection)
         {
