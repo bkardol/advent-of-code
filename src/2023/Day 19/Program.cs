@@ -1,0 +1,3 @@
+﻿using Common;
+
+PuzzleProgram.Main();
