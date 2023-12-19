@@ -44,32 +44,26 @@
             return sum;
         }
 
-        internal int GetSumOfAllPossibleRanges()
+        internal long GetNumberOfPossibleRanges()
         {
-            var sum = 0;
-            Stack<(int xMin, int xMax, int mMin, int mMax, int aMin, int aMax, int sMin, int sMax, string workflow)> ratingsRanges = new();
-            ratingsRanges.Push((1, 4000, 1, 4000, 1, 4000, 1, 4000, "in"));
-            var ranges = ratingsRanges.Pop();
-            while (ranges != default)
+            Stack<RatingRanges> matches = new();
+            Stack<RatingRanges> ratingsRanges = new();
+            ratingsRanges.Push(new RatingRanges(1, 4000, 1, 4000, 1, 4000, 1, 4000, "in"));
+            while (ratingsRanges.TryPop(out RatingRanges ratingRanges))
             {
-                var workflow = workflows[ranges.workflow];
-                foreach(var range in workflow.Process(ranges)
-                if (result == "A")
+                switch (ratingRanges.Workflow)
                 {
-                    sum += maxRatings.Values.Sum();
-                    break;
+                    case "A":
+                        matches.Push(ratingRanges);
+                        break;
+                    case "R":
+                        break;
+                    default:
+                        workflows[ratingRanges.Workflow].Process(ratingsRanges, ratingRanges);
+                        break;
                 }
-                else if (result == "R")
-                {
-                    break;
-                }
-                else
-                {
-                    workflow = workflows[result];
-                }
-                ranges = ratingsRanges.Pop();
             }
-            return sum;
+            return matches.Aggregate((long)0, (sum, match) => sum + match.GetNumberOfPossibleRanges() );
         }
     }
 }

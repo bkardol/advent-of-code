@@ -1,11 +1,7 @@
 ﻿namespace Day_19
 {
-    using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     internal class Rule
     {
@@ -42,45 +38,46 @@
             return nextRule;
         }
 
-        public (string? nextRule, int min, int max) ProcessValue(int min, int max)
+        public bool ProcessValue(Stack<RatingRanges> toProcess, Dictionary<char, (int min, int max)> ratings)
         {
-            string? nextRule = this.nextRule;
+            if (ValueFrom == default)
+            {
+                toProcess.Push(new RatingRanges(ratings, nextRule));
+                return true;
+            }
+
+            var (min, max) = ratings[ValueFrom];
+            var dictCopy = ratings.ToDictionary(entry => entry.Key, entry => entry.Value);
             switch (op)
             {
                 case '>':
                     if (min > this.value)
                     {
-                        // Batch match
-                        nextRule = this.nextRule;
+                        toProcess.Push(new RatingRanges(dictCopy, nextRule));
+                        return true;
                     }
                     else if (max > this.value)
                     {
-                        // Partial match
-                        min = this.value + 1;
-                    }
-                    else
-                    {
-                        nextRule = null;
+                        ratings[ValueFrom] = (min, this.value);
+                        dictCopy[ValueFrom] = (this.value + 1, max);
+                        toProcess.Push(new RatingRanges(dictCopy, nextRule));
                     }
                     break;
                 case '<':
                     if (max < this.value)
                     {
-                        // Batch match
-                        nextRule = this.nextRule;
+                        toProcess.Push(new RatingRanges(dictCopy, nextRule));
+                        return true;
                     }
                     else if (min < this.value)
                     {
-                        // Partial match
-                        max = this.value - 1;
-                    }
-                    else
-                    {
-                        nextRule = null;
+                        ratings[ValueFrom] = (this.value, max);
+                        dictCopy[ValueFrom] = (min, this.value - 1);
+                        toProcess.Push(new RatingRanges(dictCopy, nextRule));
                     }
                     break;
             }
-            return (nextRule, min, max);
+            return false;
         }
     }
 }

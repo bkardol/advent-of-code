@@ -2,9 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     internal class Workflow
     {
@@ -23,7 +20,6 @@
             {
                 if (rule.ValueFrom == default(char))
                 {
-                    // Fallback rule
                     return rule.ProcessValue(0);
                 }
                 var outcome = rule.ProcessValue(ratings[rule.ValueFrom]);
@@ -35,22 +31,16 @@
             throw new InvalidOperationException("Workflow incorrect.");
         }
 
-        internal (int xMin, int xMax, int mMin, int mMax, int aMin, int aMax, int sMin, int sMax, string workflow)[] ProcessRanges(IDictionary<char, int> ratings)
+        internal void Process(Stack<RatingRanges> toProcess, RatingRanges current)
         {
+            var ratingRangesDict = current.GetDictionary();
             foreach (var rule in rules)
             {
-                if (rule.ValueFrom == default(char))
+                if(rule.ProcessValue(toProcess, ratingRangesDict))
                 {
-                    // Fallback rule
-                    return rule.ProcessValue(0);
-                }
-                var outcome = rule.ProcessValue(ratings[rule.ValueFrom]);
-                if (!string.IsNullOrEmpty(outcome))
-                {
-                    return outcome;
+                    break;
                 }
             }
-            throw new InvalidOperationException("Workflow incorrect.");
         }
     }
 }
