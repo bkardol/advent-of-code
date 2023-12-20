@@ -4,8 +4,6 @@ using Day20;
 
 internal class Solution : PuzzleSolution<Dictionary<string, Module>>
 {
-    private string rxConjunctionSource = "";
-
     public override Dictionary<string, Module> ParseInput(string[] lines)
     {
         var dict = lines.Select(line =>
@@ -13,12 +11,7 @@ internal class Solution : PuzzleSolution<Dictionary<string, Module>>
             var splitted = line.Split(" -> ");
             var isFlipFlop = splitted[0][0] == '%';
             var isConjunction = splitted[0][0] == '&';
-            var module = new Module(splitted[0][1..], isFlipFlop, isConjunction, splitted[1].Split(", "));
-            if (module.Destinations.Contains("rx"))
-            {
-                rxConjunctionSource = module.Key;
-            }
-            return module;
+            return new Module(splitted[0][1..], isFlipFlop, isConjunction, splitted[1].Split(", "));
         }).ToDictionary(m => m.Key, m => m);
 
         foreach (var key in dict.Keys)
@@ -64,8 +57,10 @@ internal class Solution : PuzzleSolution<Dictionary<string, Module>>
     public override string[] Part2()
     {
         Queue<(string source, string module, bool pulse)> instructions = new();
+
+        var rxConjunctionSource = Input.Values.First(m => m.Destinations.Contains("rx")).Key;
         Dictionary<string, int> rxSources = Input.Values.Where(m => m.Destinations.Contains(rxConjunctionSource)).ToDictionary(m => m.Key, m => 0);
-        
+
         for (int i = 1; ; i++)
         {
             instructions.Enqueue(("button", "roadcaster", false));
