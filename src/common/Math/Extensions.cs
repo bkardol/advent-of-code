@@ -50,5 +50,33 @@
 
             return (totalDistance / 2) + Math.Abs(totalSurface / 2) + 1;
         }
+
+        /// <summary>
+        /// Get the quadratic fit for 3 outputs from a repeating (quadratic) pattern.
+        /// </summary>
+        /// <param name="patternFirst">First output of the quadratic pattern.</param>
+        /// <param name="patternSecond">Second output of the quadratic pattern.</param>
+        /// <param name="patternThird">Third output of the quadratic pattern.</param>
+        /// <returns>Quadratic fit, which in turn can be used to calculate the root.</returns>
+        public static (int A, int B, int C) CalculateQuadraticFit(int patternFirst, int patternSecond, int patternThird)
+        {
+            var c = patternFirst;
+            var ba = patternSecond - c;
+            var aa = patternThird - c - (2 * ba);
+            var a = aa / 2;
+            var b = ba - a;
+            return (a, b, c);
+        }
+
+        /// <summary>
+        /// Solves a quadratic equation for a pattern with the use of 3 known quadratic fits.
+        /// </summary>
+        /// <param name="iterations">The number of iterations of the pattern to get the result for.</param>
+        /// <param name="quadraticFitA">First quadratic fit.</param>
+        /// <param name="quadraticFitB">Second quadratic fit.</param>
+        /// <param name="quadraticFitC">Third quadratic fit.</param>
+        /// <returns>The result of the quadratic equation.</returns>
+        public static long QuadraticEquation(long iterations, int quadraticFitA, int quadraticFitB, int quadraticFitC) =>
+            quadraticFitA * (iterations * iterations) + (quadraticFitB * iterations) + quadraticFitC;
     }
 }
