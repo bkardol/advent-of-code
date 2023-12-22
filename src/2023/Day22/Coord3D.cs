@@ -11,9 +11,4 @@
         public Coord3D ModifyZ(int modifier) => new(X, Y, Z + modifier);
 
     }
-    internal struct Coord2D(int x, int y)
-    {
-        public int X { get; } = x;
-        public int Y { get; } = y;
-    }
 }
