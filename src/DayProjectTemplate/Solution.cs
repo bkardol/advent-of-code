@@ -10,16 +10,12 @@ namespace $safeprojectname$
 
     public override string[] Part1()
     {
-        return new string[]
-        {
-        };
+        return [];
     }
 
     public override string[] Part2()
     {
-        return new string[]
-        {
-        };
+        return [];
     }
 }
 }
