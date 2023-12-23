@@ -6,9 +6,15 @@
 
         public Map(Tile[][] tiles, bool onlyDownhill)
         {
-            foreach (var tile in tiles.SelectMany(t => t))
+            var flatTiles = tiles.SelectMany(t => t).ToArray();
+            tiles[0][1].IsFirst = true;
+            foreach (var tile in flatTiles)
             {
-                tile.Prepare(onlyDownhill);
+                tile.SetWalkableAdjacent(onlyDownhill);
+            }
+            foreach (var tile in flatTiles)
+            {
+                tile.SetWalkableAdjacentCrossroads();
             }
             this.tiles = tiles;
         }
@@ -28,15 +34,24 @@
             }
 
             var routeLength = 0;
-            foreach (var next in current.Walk())
+
+            // ".Jump()" can be replaced with ".Walk()", but will go way slower :)
+            foreach (var next in current.Jump())
             {
-                if (!path.Add(next))
+                if (!path.Add(next.Key))
                 {
                     continue;
                 }
+                foreach (var tile in next.Value)
+                {
+                    path.Add(tile);
+                }
 
-                routeLength = Math.Max(routeLength, GetTouristicRoute(path, next, end));
-                path.Remove(next);
+                routeLength = Math.Max(routeLength, GetTouristicRoute(path, next.Key, end));
+                foreach (var tile in next.Value)
+                {
+                    path.Remove(tile);
+                }
             }
             return routeLength;
         }
