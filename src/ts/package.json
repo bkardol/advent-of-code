@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "add:day": "node --loader ts-node/esm scripts/initDay.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
     "prettier": "^3.4.1",
     "typescript": "^5.7.2",
     "ts-jest": "^29.2.5",
+    "ts-node": "10.9.2",
     "@types/jest": "^29.5.14"
   },
   "packageManager": "pnpm@9.13.2+sha256.ccce81bf7498c5f0f80e31749c1f8f03baba99d168f64590fc7e13fad3ea1938"

@@ -3,6 +3,7 @@
     "baseUrl": "./",
     "target": "es2020",
     "module": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
