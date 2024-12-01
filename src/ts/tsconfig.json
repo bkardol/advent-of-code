@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "target": "es2020",
+    "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "outDir": "./dist",
     "paths": {
       "@aoc/common": ["common/index.ts"]
     }
   },
-  "include": ["**/*"]
+  "exclude": ["./*.ts"]
 }

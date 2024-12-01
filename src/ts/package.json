@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "npx jest",
     "add:day": "node --loader ts-node/esm scripts/initDay.ts"
   },
   "keywords": [],
