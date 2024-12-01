@@ -17,6 +17,7 @@ export class Solution {
     const output = left
       .map((left) => left * right.filter((value) => value === left).length)
       .reduce((prev, curr) => prev + curr, 0);
+
     return output;
   }
 
