@@ -1,19 +1,16 @@
-export const asMatrix = <
-  T extends Cell<T>,
-  Y extends new (value: string) => InstanceType<Y>,
->(
+export const asMatrix = <TCell extends Cell<TCell, TValue>, TValue>(
   rows: string[],
-  ctor: Y
+  ctor: (value: string) => TCell
 ) => {
   const matrix = rows.map((row) =>
-    [...row].map((value) => new ctor(value) as T)
+    [...row].map((value) => ctor(value) as TCell)
   );
   linkMatrix(matrix);
   return matrix;
 };
 
-export class Cell<TCell extends Cell<TCell>> {
-  public value!: string;
+export class Cell<TCell extends Cell<TCell, TValue>, TValue> {
+  public value!: TValue;
 
   public left?: TCell;
   public right?: TCell;
@@ -25,7 +22,7 @@ export class Cell<TCell extends Cell<TCell>> {
   public bottomLeft?: TCell;
   public bottomRight?: TCell;
 
-  constructor(value: string) {
+  constructor(value: TValue) {
     this.value = value;
   }
 
@@ -57,7 +54,7 @@ export class Cell<TCell extends Cell<TCell>> {
   }
 }
 
-function linkMatrix<T extends Cell<T>>(matrix: T[][]) {
+function linkMatrix<T extends Cell<T, TValue>, TValue>(matrix: T[][]) {
   for (let y = 0; y < matrix.length; y++) {
     const row = matrix[y];
     for (let x = 0; x < matrix.length; x++) {

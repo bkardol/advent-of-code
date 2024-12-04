@@ -1,14 +1,11 @@
 import { Cell, asMatrix, asStringArray } from "@aoc/common";
 
-class Character extends Cell<Character> {}
+class Character extends Cell<Character, string> {}
 
 export class Solution {
   public part1(input: string): number {
     const rows = asStringArray(input);
-    const xmasFound = asMatrix<Character, typeof Character>(
-      rows,
-      Character
-    ).reduce(
+    const xmasFound = asMatrix(rows, (value) => new Character(value)).reduce(
       (accRows, row) =>
         accRows +
         row.reduce((accCells, cell) => {
@@ -39,10 +36,7 @@ export class Solution {
 
   public part2(input: string): number {
     const rows = asStringArray(input);
-    const xmasFound = asMatrix<Character, typeof Character>(
-      rows,
-      Character
-    ).reduce(
+    const xmasFound = asMatrix(rows, (value) => new Character(value)).reduce(
       (accRows, row) =>
         accRows +
         row.reduce((accCells, cell) => {
