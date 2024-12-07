@@ -61,13 +61,7 @@ export class Solution {
     return equations.reduce(
       (acc, equation) =>
         acc +
-        (this.trySolveEquation(
-          operators,
-          equation,
-          1,
-          equation.numbers[0],
-          Operator.ADDITION
-        )
+        (this.trySolveEquation(operators, equation, 1, equation.numbers[0])
           ? equation.testValue
           : 0),
       0
@@ -78,8 +72,7 @@ export class Solution {
     operators: string[],
     equation: Equation,
     index: number,
-    currentValue: number,
-    previousOperator: string
+    currentValue: number
   ): boolean {
     if (index === equation.numbers.length) {
       return currentValue === equation.testValue;
@@ -102,13 +95,7 @@ export class Solution {
 
       if (
         newValue <= equation.testValue &&
-        this.trySolveEquation(
-          operators,
-          equation,
-          index + 1,
-          newValue,
-          previousOperator
-        )
+        this.trySolveEquation(operators, equation, index + 1, newValue)
       ) {
         return true;
       }
