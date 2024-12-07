@@ -101,6 +101,7 @@ export class Solution {
       }
 
       if (
+        newValue <= equation.testValue &&
         this.trySolveEquation(
           operators,
           equation,
