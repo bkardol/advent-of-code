@@ -4,8 +4,13 @@ export const asMatrix = <TCell extends Cell<TCell, TValue>, TValue>(
   rows: string[],
   ctor: (value: string) => TCell
 ) => {
-  const matrix = rows.map((row) =>
-    [...row].map((value) => ctor(value) as TCell)
+  const matrix = rows.map((row, y) =>
+    [...row].map((value, x) => {
+      const cell = ctor(value) as TCell;
+      cell.x = x;
+      cell.y = y;
+      return cell;
+    })
   );
   linkMatrix(matrix);
   return matrix;

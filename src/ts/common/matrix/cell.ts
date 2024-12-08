@@ -1,6 +1,9 @@
 export class Cell<TCell extends Cell<TCell, TValue>, TValue> {
   public value!: TValue;
 
+  public x!: number;
+  public y!: number;
+
   public left?: TCell;
   public right?: TCell;
   public top?: TCell;
