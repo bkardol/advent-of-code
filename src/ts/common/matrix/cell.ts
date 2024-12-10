@@ -44,4 +44,21 @@ export class Cell<TCell extends Cell<TCell, TValue>, TValue> {
   ): TCell | undefined {
     return direction(this as unknown as TCell);
   }
+
+  public getAdjacent(
+    includeDiagonal: boolean,
+    condition?: (cell: TCell) => boolean
+  ): TCell[] {
+    return [
+      this.left,
+      this.right,
+      this.top,
+      this.bottom,
+      ...(includeDiagonal
+        ? [this.topLeft, this.topRight, this.bottomLeft, this.bottomRight]
+        : []),
+    ].filter(
+      (cell): cell is TCell => !!cell && (!condition || condition(cell))
+    );
+  }
 }
