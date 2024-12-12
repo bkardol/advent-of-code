@@ -38,8 +38,6 @@ export class Solution {
       }
     }
 
-    regions.forEach((region) => console.log(region.numberOfSides));
-
     return regions.reduce((acc, region) => acc + fencePrice(region), 0);
   }
 
