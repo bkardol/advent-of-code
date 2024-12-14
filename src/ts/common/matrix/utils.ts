@@ -2,17 +2,19 @@ import { Cell } from "./cell";
 
 export const asMatrix = <TCell extends Cell<TCell, TValue>, TValue>(
   rows: string[],
-  ctor: (value: string) => TCell
+  ctor: (value: string, position: { x: number; y: number }) => TCell,
+  horizontalRepeat = false,
+  verticalRepeat = false
 ) => {
   const matrix = rows.map((row, y) =>
     [...row].map((value, x) => {
-      const cell = ctor(value) as TCell;
+      const cell = ctor(value, { x, y }) as TCell;
       cell.x = x;
       cell.y = y;
       return cell;
     })
   );
-  linkMatrix(matrix);
+  linkMatrix(matrix, horizontalRepeat, verticalRepeat);
   return matrix;
 };
 
@@ -58,16 +60,26 @@ export const countInMatrix = <TCell extends Cell<TCell, TValue>, TValue>(
   return count;
 };
 
-function linkMatrix<T extends Cell<T, TValue>, TValue>(matrix: T[][]) {
+export const linkMatrix = <T extends Cell<T, TValue>, TValue>(
+  matrix: T[][],
+  horizontalRepeat = false,
+  verticalRepeat = false
+) => {
   for (let y = 0; y < matrix.length; y++) {
     const row = matrix[y];
-    for (let x = 0; x < matrix.length; x++) {
+    for (let x = 0; x < row.length; x++) {
       if (x > 0) {
         matrix[y][x].setLeft(row[x - 1]);
       }
       if (y > 0) {
         matrix[y][x].setTop(matrix[y - 1][x]);
       }
+      if (horizontalRepeat && x == row.length - 1) {
+        matrix[y][0].setLeft(row[x]);
+      }
+      if (verticalRepeat && y == matrix.length - 1) {
+        matrix[0][x].setTop(row[x]);
+      }
     }
   }
-}
+};
