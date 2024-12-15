@@ -40,9 +40,14 @@ export class Cell<TCell extends Cell<TCell, TValue>, TValue> {
   }
 
   public getInDirection(
-    direction: (TCell: TCell) => TCell | undefined
+    direction: (TCell: TCell) => TCell | undefined,
+    condition?: (cell: TCell) => boolean
   ): TCell | undefined {
-    return direction(this as unknown as TCell);
+    let cell: TCell | undefined = this as unknown as TCell;
+    do {
+      cell = direction(cell as unknown as TCell);
+    } while (cell && condition && !condition(cell));
+    return cell;
   }
 
   public getAdjacent(
