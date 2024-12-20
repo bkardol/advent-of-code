@@ -15,7 +15,7 @@ describe("Day 20", () => {
     });
     test("part 1 input", () => {
       const input = getInput(__dirname);
-      expect(solution.part1(input)).toBe(0);
+      expect(solution.part1(input)).toBe(1429);
     });
   });
 
@@ -26,7 +26,7 @@ describe("Day 20", () => {
     });
     test("part 2 input", () => {
       const input = getInput(__dirname);
-      expect(solution.part2(input)).toBe(0);
+      expect(solution.part2(input)).toBe(988931);
     });
   });
 });
