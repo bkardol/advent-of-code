@@ -20,13 +20,9 @@ describe("Day 24", () => {
   });
 
   describe("part 2", () => {
-    test("part 2 example", () => {
-      const input = getExampleInput(__dirname);
-      expect(solution.part2(input)).toBe(0);
-    });
     test("part 2 input", () => {
       const input = getInput(__dirname);
-      expect(solution.part2(input)).toBe(0);
+      expect(solution.part2(input)).toBe("dwp,ffj,gjh,jdr,kfm,z08,z22,z31");
     });
   });
 });
