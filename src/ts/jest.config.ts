@@ -16,6 +16,7 @@ const config: JestConfigWithTsJest = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: "<rootDir>/",
   }),
+  testMatch: ["**/2024/day24/*.spec.ts"],
 };
 
 export default config;
