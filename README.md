@@ -21,3 +21,8 @@ This repository contains my solutions to the Advent of Code puzzles listed on th
 
 - The puzzles for 2024 are available [here](https://adventofcode.com/2024).
 - My solutions for 2024 are available [here](https://github.com/bkardol/advent-of-code/tree/main/src/ts/2024).
+
+## 2025
+
+- The puzzles for 2025 are available [here](https://adventofcode.com/2025).
+- My solutions for 2025 are available [here](https://github.com/bkardol/advent-of-code/tree/main/src/ts/2025).
