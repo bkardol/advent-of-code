@@ -7,15 +7,7 @@ export class Solution {
     );
     let totalJoltage = 0;
     for (const bank of batteryBanks) {
-      const { digit: maxDigit, index: indexOfMaxDigit } =
-        this.highestDigitForBank(bank, 0, 1);
-      const { digit: maxRightDigit } = this.highestDigitForBank(
-        bank,
-        indexOfMaxDigit + 1,
-        0
-      );
-      const joltage = `${maxDigit}${maxRightDigit}`;
-      totalJoltage += Number(joltage);
+      totalJoltage += this.getJoltageOutputForBank(bank, 2);
     }
     return totalJoltage;
   }
@@ -26,17 +18,24 @@ export class Solution {
     );
     let totalJoltage = 0;
     for (const bank of batteryBanks) {
-      let bankJoltage = "";
-      let fromIndex = 0;
-      for (let i = 11; i >= 0; i--) {
-        const { digit: maxDigit, index: indexOfMaxDigit } =
-          this.highestDigitForBank(bank, fromIndex, i);
-        bankJoltage += maxDigit.toString();
-        fromIndex = indexOfMaxDigit + 1;
-      }
-      totalJoltage += Number(bankJoltage);
+      totalJoltage += this.getJoltageOutputForBank(bank, 12);
     }
     return totalJoltage;
+  }
+
+  private getJoltageOutputForBank(
+    bank: number[],
+    joltageLength: number
+  ): number {
+    let bankJoltage = "";
+    let fromIndex = 0;
+    for (let i = joltageLength - 1; i >= 0; i--) {
+      const { digit: maxDigit, index: indexOfMaxDigit } =
+        this.highestDigitForBank(bank, fromIndex, i);
+      bankJoltage += maxDigit.toString();
+      fromIndex = indexOfMaxDigit + 1;
+    }
+    return Number(bankJoltage);
   }
 
   private highestDigitForBank(
